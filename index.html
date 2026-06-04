@@ -26,29 +26,41 @@ background:#00d084;
 border:none;
 padding:10px;
 border-radius:10px;
-font-size:16px;
 width:100%;
+font-size:16px;
 }
 </style>
 </head>
-
 <body>
 
 <h1>🚗 Auto Scanner</h1>
 
-<div class="card">
-<h2>BMW E46 320i</h2>
-<p>197.000 km</p>
-<p>18 km entfernt</p>
-<button>Inserat öffnen</button>
-</div>
+<div id="autos"></div>
 
+<script>
+fetch("autos.json")
+.then(r=>r.json())
+.then(data=>{
+
+const container=document.getElementById("autos");
+
+data.forEach(auto=>{
+
+container.innerHTML+=`
 <div class="card">
-<h2>Golf GTI</h2>
-<p>150.000 km</p>
-<p>30 km entfernt</p>
+<h2>${auto.title}</h2>
+<p>${auto.km}</p>
+<p>${auto.distance}</p>
+<a href="${auto.url}" target="_blank">
 <button>Inserat öffnen</button>
+</a>
 </div>
+`;
+
+});
+
+});
+</script>
 
 </body>
 </html>
