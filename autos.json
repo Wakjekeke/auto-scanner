@@ -1,8 +1,28 @@
 [
   {
     "title": "BMW E46 320i",
+    "price": "2.500 €",
     "km": "197.000 km",
+    "ez": "02/2003",
+    "fuel": "Benzin",
+    "power": "170 PS",
+    "gear": "Automatik",
     "distance": "18 km entfernt",
-    "url": "https://www.kleinanzeigen.de"
+    "location": "53639",
+    "image": "https://via.placeholder.com/800x450?text=BMW+E46+320i",
+    "url": "https://www.kleinanzeigen.de/s-autos/sinzig/c216l5395"
+  },
+  {
+    "title": "VW Golf GTI",
+    "price": "6.200 €",
+    "km": "150.000 km",
+    "ez": "05/2007",
+    "fuel": "Benzin",
+    "power": "200 PS",
+    "gear": "Schaltgetriebe",
+    "distance": "30 km entfernt",
+    "location": "Sinzig",
+    "image": "https://via.placeholder.com/800x450?text=VW+Golf+GTI",
+    "url": "https://www.kleinanzeigen.de/s-autos/sinzig/c216l5395"
   }
 ]
