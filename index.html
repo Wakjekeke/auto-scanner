@@ -4,62 +4,82 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Auto Scanner</title>
-
 <style>
-body{
-background:#0a0f1f;
-color:white;
-font-family:Arial,sans-serif;
-padding:20px;
-}
-
-.card{
-background:#111827;
-border:1px solid #00d084;
-border-radius:15px;
-padding:15px;
-margin-top:15px;
-}
-
-button{
-background:#00d084;
-border:none;
-padding:10px;
-border-radius:10px;
-width:100%;
-font-size:16px;
-}
+body{background:#0a0f1f;color:white;font-family:Arial,sans-serif;padding:18px}
+h1{font-size:34px}
+.box,.card{background:#111827;border:1px solid #00d084;border-radius:16px;padding:15px;margin-top:14px}
+input,select,button{width:100%;padding:12px;margin-top:8px;border-radius:10px;border:1px solid #333;background:#0b1020;color:white;font-size:16px}
+button{background:#00d084;color:#001b12;font-weight:bold}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.card h2{margin:0 0 10px}
+.small{color:#9ca3af}
 </style>
 </head>
 <body>
 
 <h1>🚗 Auto Scanner</h1>
 
+<div class="box">
+  <div class="grid">
+    <input id="ort" placeholder="PLZ / Ort" value="Sinzig">
+    <select id="radius">
+      <option value="">Radius egal</option>
+      <option>10 km</option>
+      <option selected>50 km</option>
+      <option>100 km</option>
+    </select>
+    <input id="marke" placeholder="Marke z.B. BMW">
+    <input id="modell" placeholder="Modell z.B. E46">
+    <input id="preis" placeholder="Preis bis">
+    <input id="km" placeholder="KM bis">
+  </div>
+  <button onclick="filterAutos()">Suchen</button>
+</div>
+
+<p class="small" id="count">Lade Autos...</p>
 <div id="autos"></div>
 
 <script>
-fetch("autos.json")
+let autos=[];
+
+fetch("autos.json?x="+Date.now())
 .then(r=>r.json())
 .then(data=>{
-
-const container=document.getElementById("autos");
-
-data.forEach(auto=>{
-
-container.innerHTML+=`
-<div class="card">
-<h2>${auto.title}</h2>
-<p>${auto.km}</p>
-<p>${auto.distance}</p>
-<a href="${auto.url}" target="_blank">
-<button>Inserat öffnen</button>
-</a>
-</div>
-`;
-
+  autos=data;
+  filterAutos();
 });
 
-});
+function filterAutos(){
+  const marke=document.getElementById("marke").value.toLowerCase();
+  const modell=document.getElementById("modell").value.toLowerCase();
+  const preisMax=parseInt(document.getElementById("preis").value)||999999999;
+  const kmMax=parseInt(document.getElementById("km").value)||999999999;
+
+  const gefiltert=autos.filter(a=>{
+    const text=((a.title||"")+" "+(a.marke||"")+" "+(a.modell||"")).toLowerCase();
+    const preis=parseInt(String(a.preis||"0").replace(/\D/g,""))||0;
+    const km=parseInt(String(a.km||"0").replace(/\D/g,""))||0;
+    return text.includes(marke) && text.includes(modell) && preis<=preisMax && km<=kmMax;
+  });
+
+  document.getElementById("count").innerText=gefiltert.length+" Treffer sichtbar";
+  const box=document.getElementById("autos");
+  box.innerHTML="";
+
+  gefiltert.forEach(a=>{
+    box.innerHTML+=`
+      <div class="card">
+        <h2>${a.title||"Unbekanntes Auto"}</h2>
+        <p>${a.preis||"Preis unbekannt"}</p>
+        <p>${a.km||"KM unbekannt"}</p>
+        <p>${a.distance||a.ort||"Ort unbekannt"}</p>
+        <a href="${a.url||"#"}" target="_blank">
+          <button>Inserat öffnen</button>
+        </a>
+      </div>
+    `;
+  });
+}
 </script>
 
 </body>
